@@ -7,7 +7,7 @@
  * @LastEditTime: 2024-06-07 23:21:38
  */
 
-import { PKG_NAME, WEEKS, VIEWS, CALENDAR_PANELS, FULL_LAYOUT, View } from './constants';
+import { PKG_NAME, WEEKS, VIEWS, CALENDAR_PANELS, FULL_LAYOUT, View, CalendarView } from './constants';
 import { values } from '../utils/shared';
 
 import type { Voidable } from '../utils/shared';
@@ -17,7 +17,7 @@ declare global {
   namespace WechatMiniprogram {
     namespace Component {
       interface AnimatedUpdater {
-        (): SkylineStyleObject;
+        (): SkylineStyles;
       }
       interface AnimatedUserConfig {
         immediate?: boolean;
@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-export type SkylineStyleObject = Record<string, string | number>;
+export type SkylineStyles = Record<string, string | number>;
 
 export interface Shared<T> {
   value: T;
@@ -54,23 +54,21 @@ export type ComponentInstance = WechatMiniprogram.Component.Instance<
   WechatMiniprogram.Component.MethodOption
 >;
 
-export type CalendarView = (typeof VIEWS)[keyof typeof VIEWS];
-
-export const viewFlag = (view: string): View => {
-  const inputView = view || VIEWS.MONTH;
-  const idx = values(VIEWS).indexOf(inputView as CalendarView);
-  return idx < 0 ? View.month : 1 << idx;
-};
-
-export const isView = (view: unknown): view is View =>
-  view === View.week || view === View.month || view === View.schedule;
-
-export const flagView = (flag: View) => values(VIEWS)[Math.log2(flag)];
-
-export const middle = (count: number) => count >> 1;
-
+/**
+ * 是否skyline渲染
+ */
 export const isSkyline = (renderer?: string): renderer is 'skyline' => renderer === 'skyline';
 
+/**
+ * 警告
+ */
+export const warn = (...args: any[]) => console.warn(`[${PKG_NAME}]`, ...args);
+
+/**
+ * 计算目标下标与当前下标差值，循环周期 CALENDAR_PANELS
+ * @param idx 目标下标
+ * @param curr 当前下标
+ */
 export const circularDiff = (idx: number, curr: number): number => {
   const half = Math.floor(CALENDAR_PANELS / 2);
   if (idx < curr - half) idx = idx + CALENDAR_PANELS;
@@ -78,20 +76,9 @@ export const circularDiff = (idx: number, curr: number): number => {
   return idx - curr;
 };
 
-export const InitPanels = <T>(prefix: string, mixin: Record<string, any> = {}) =>
-  Array.from<undefined, T>({ length: CALENDAR_PANELS }, (_, i) => ({ key: `${prefix}_${i}`, ...mixin }) as T);
-
-export const InitWeeks = (weeks: string = WEEKS, prefix: string = 'w') =>
-  Array.from<undefined, CalendarWeek>({ length: weeks.length }, (_, i) => ({
-    key: `${prefix}_${i}`,
-    label: weeks[i]
-  }));
-
-export const easingOpt = (
-  duration: number,
-  easing: (...args: any[]) => any = wx.worklet.Easing.out(wx.worklet.Easing.sin)
-): WechatMiniprogram.TimingOption => ({ duration, easing });
-
+/**
+ * 延迟一部分操作到下一个时间片再执行。
+ */
 export const nextTick = <
   T extends Voidable<(...args: any[]) => any> = undefined,
   R = T extends NonNullable<T> ? Awaited<ReturnType<T>> : void
@@ -105,8 +92,11 @@ export const nextTick = <
   });
 };
 
-export const severalTicks = async (times: number) => {
-  while (times--) {
+/**
+ * 延迟几个时间片
+ */
+export const severalTicks = async (n: number) => {
+  while (n--) {
     await nextTick();
   }
 };
@@ -180,7 +170,9 @@ export interface OnceEmitter {
   emit: (...detail: any[]) => void;
   cancel: () => void;
 }
-/** 触发一次 */
+/**
+ * 事件触发器
+ */
 export const onceEmitter = (instance: ComponentInstance, event: string): OnceEmitter => {
   let emits = 0;
   return {
@@ -194,18 +186,64 @@ export const onceEmitter = (instance: ComponentInstance, event: string): OnceEmi
   };
 };
 
+/** 布局隐藏样式前缀 */
+const LHCP = 'wc--hide-';
+
+/**
+ * 获取布局区域隐藏样式
+ * @param layout 当前布局区域
+ */
 export const layoutHideCls = (layout?: Array<LayoutArea>): string => {
   if (!layout?.length) return '';
   const hideAreas = FULL_LAYOUT.filter(item => !layout.includes(item));
-  return hideAreas.map(item => `wc--hide-${item}`).join(' ');
+  return hideAreas.map(item => `${LHCP}${item}`).join(' ');
 };
 
+/**
+ * 添加区域隐藏样式
+ */
 export const addLayoutHideCls = (cls: string, area: LayoutArea): string => {
-  const reg = new RegExp(`wc--hide-${area}\\s*`);
+  const reg = new RegExp(`${LHCP}${area}\\s*`);
   if (reg.test(cls)) return cls;
-  return `${cls} wc--hide-${area}`;
+  return `${cls} ${LHCP}${area}`;
 };
 
-export const hasLayoutArea = (cls: string, area: LayoutArea) => !new RegExp(`wc--hide-${area}\\s*`).test(cls);
+/**
+ * 某个布局区域是否隐藏
+ * @param cls 隐藏样式
+ * @param area 检查区域
+ */
+export const hasLayoutArea = (cls: string, area: LayoutArea) => !new RegExp(`${LHCP}${area}\\s*`).test(cls);
 
-export const warn = (...args: any[]) => console.warn(`[${PKG_NAME}]`, ...args);
+/**
+ * 获取视图值
+ * @param view 视图
+ */
+export const viewFlag = (view: string): View => {
+  const inputView = view || VIEWS.MONTH;
+  const idx = values(VIEWS).indexOf(inputView as CalendarView);
+  return idx < 0 ? View.month : 1 << idx;
+};
+
+/**
+ * 是否是一个视图
+ * @param flag 视图值
+ */
+export const isView = (flag: unknown): flag is View =>
+  flag === View.week || flag === View.month || flag === View.schedule;
+
+/**
+ * 根据视图值返回视图
+ * @param flag 视图值
+ */
+export const flagView = (flag: View) => values(VIEWS)[Math.log2(flag)];
+
+/**
+ * 初始化星期
+ * @param weeks 星期
+ */
+export const initWeeks = (weeks: string = WEEKS) =>
+  Array.from<undefined, CalendarWeek>({ length: weeks.length }, (_, i) => ({
+    key: `w_${i}`,
+    label: weeks[i]
+  }));

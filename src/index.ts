@@ -18,7 +18,7 @@ import {
 } from './interface/calendar';
 import { VERSION, CALENDAR_PANELS, View, PURE_PROPS, VIEWS, SELECTOR, FONT } from './basic/constants';
 import { Pointer, createPointer } from './basic/pointer';
-import { PanelTool } from './basic/panel';
+import { PanelTool, initPanels } from './basic/panel';
 import { Layout } from './basic/layout';
 import { Dragger } from './basic/drag';
 import { AnnualPanelSwitch } from './basic/annual';
@@ -28,20 +28,18 @@ import {
   isView,
   viewFlag,
   flagView,
-  middle,
   nodeRect,
   isSkyline,
-  InitPanels,
-  InitWeeks,
+  initWeeks,
   mergeStr,
   onceEmitter,
   layoutHideCls
 } from './basic/tools';
-import { promises, omit, getStyle } from './utils/shared';
+import { promises, omit, middle, getStyle } from './utils/shared';
 import { add, sub, div } from './utils/calc';
 
 import type { WcYear, CalendarMark, CalendarStyleMark } from './interface/calendar';
-import type { CalendarView } from './basic/tools';
+import type { CalendarView } from './basic/constants';
 import type {
   CalendarData,
   CalendarProp,
@@ -122,9 +120,9 @@ Component<CalendarData, CalendarProp, CalendarMethod, CalendarCustomProp>({
   data: {
     renderer: 'unknown',
     checked: null,
-    panels: InitPanels<CalendarPanel>('panel'),
-    years: InitPanels<WcYear>('year'),
-    weeks: InitWeeks(),
+    panels: initPanels<CalendarPanel>('panel'),
+    years: initPanels<WcYear>('year'),
+    weeks: initWeeks(),
     current: initCurrent,
     currView: VIEWS.MONTH,
     initView: VIEWS.MONTH,
@@ -197,7 +195,7 @@ Component<CalendarData, CalendarProp, CalendarMethod, CalendarCustomProp>({
       }
 
       const checked = normalDate(this.data.date) || WxCalendar.today;
-      const weeks = InitWeeks(sortWeeks(this.data.weekstart));
+      const weeks = initWeeks(sortWeeks(this.data.weekstart));
       const isWeekView = this._view_ & View.week;
 
       const panels = isWeekView ? this._panel_.createWeekPanels(checked) : this._panel_.createMonthPanels(checked);
@@ -244,11 +242,9 @@ Component<CalendarData, CalendarProp, CalendarMethod, CalendarCustomProp>({
     },
     async initializeRects() {
       const query = nodeRect(this);
-      const [calendar, rects] = await promises([query(SELECTOR.CALENDAR), query(SELECTOR.WEEK_ITEM)]);
-      const x = calendar[0].left.toFixed(1);
+      const calendar = await query(SELECTOR.CALENDAR);
       const calendarWidth = calendar[0].width;
       this.$_calendar_width.value = isSkyline(this.renderer) ? calendarWidth : Math.round(calendarWidth);
-      this._centres_ = rects.map(({ left, width }) => sub(add(left.toFixed(1), div(width.toFixed(1), 2)), x));
     },
     async refreshView({ view }) {
       if (this._view_ & view) return;

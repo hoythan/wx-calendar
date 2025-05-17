@@ -496,7 +496,8 @@ type ScheduleEventDetail = {
 ```
 修改样式
 ```html
-<calendar style="--wc-bg-light: #000;" />
+<!-- 例如：设置主题色-->
+<calendar style="--wc-primary: #4CAF50;" />
 ```
 
 ### 插件

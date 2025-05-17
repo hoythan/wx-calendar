@@ -41,9 +41,9 @@ const calcCurrIdx = (mon: WcMonth, checked: CalendarDay): PointerIndexLocation =
   return { ddx: idx % 7, wdx: Math.floor(idx / 7), len: mon.weeks.length };
 };
 
-const calcPosition = (mon: WcMonth, checked: CalendarDay, centres: number[]): PointerLocation => {
+const calcPosition = (mon: WcMonth, checked: CalendarDay): PointerLocation => {
   const { ddx, wdx, len } = calcCurrIdx(mon, checked);
-  const x = `${centres[ddx]}px`;
+  const x = `calc(var(--wc-panel-padding) + var(--wc-wd-gap) + var(--wc-week-width) * ${ddx})`;
   const y = `calc(100% / ${len} * ${wdx})`;
   return { x, y };
 };
@@ -75,7 +75,7 @@ export class Pointer extends CalendarHandler {
 
     this._vibrate_ = vibrate;
 
-    const { x, y } = calcPosition(panel, checked, instance._centres_);
+    const { x, y } = calcPosition(panel, checked);
 
     if (sets?.pointer) {
       sets.pointer = { ...sets.pointer, x, y, show: this.show, animate: true };
@@ -107,7 +107,7 @@ export class Pointer extends CalendarHandler {
   public async resetOffsetY(date: CalendarDay) {
     const instance = this._instance_;
     const month = instance._calendar_.createMonth(date, instance.data.weekstart);
-    const { y } = calcPosition(month, date, instance._centres_);
+    const { y } = calcPosition(month, date);
     instance.setData({
       [`pointer.y`]: y,
       [`pointer.show`]: false,

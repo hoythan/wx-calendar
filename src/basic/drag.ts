@@ -7,7 +7,7 @@
  * @LastEditTime: 2024-07-27 23:53:34
  */
 import { CalendarHandler, CalendarInstance } from '../interface/component';
-import { applyAnimated, clearAnimated, circularDiff, easingOpt, Shared } from './tools';
+import { applyAnimated, clearAnimated, circularDiff, Shared } from './tools';
 import { SELECTOR, View, CALENDAR_PANELS } from './constants';
 import { Layout } from './layout';
 import { PanelTool } from './panel';
@@ -45,6 +45,11 @@ const VIEW_BAR_PADDING = 8;
 const DRAG_OUT_DURATION = 280;
 /** 弹性系数 */
 const ELASTIC_COE = 220;
+
+export const easingOpt = (
+  duration: number,
+  easing: (...args: any[]) => any = wx.worklet.Easing.out(wx.worklet.Easing.sin)
+): WechatMiniprogram.TimingOption => ({ duration, easing });
 
 /**
  * skyline渲染下的面板拖拽控制器

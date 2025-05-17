@@ -16,12 +16,16 @@
   background: transparent;
   overflow: hidden;
   contain: layout style;
+  --wc-panel-padding: 10rpx;
+  --wc-panel-content: calc(100% - var(--wc-panel-padding) * 2);
+  --wc-week-width: calc(var(--wc-panel-content) / 7);
+  --wc-wd-gap: calc((var(--wc-week-width) - #{$wc-calendar-pointer-size}) / 2);
   
   &-container {
     width: 100%;
     height: 100%;
     min-height: theme(panel-height);
-    padding: 0 10rpx;
+    padding: 0 var(--wc-panel-padding);
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -180,7 +184,7 @@
     width: $wc-calendar-pointer-size;
     height: $wc-calendar-pointer-size;
     border-radius: 50%;
-    transform: translate(-50%, 0);
+    // transform: translate(-50%, 0);
     z-index: -1;
     overflow: hidden;
     @include if (animate) {

@@ -27,24 +27,23 @@ import type { ArrItem } from '../utils/shared';
 import type { PluginConstructor, PluginKeys, PluginUse, ServicePlugins } from '../basic/service';
 import type { CalendarInstance, UsePluginService, EventSchedule, DEFAULT_PLUGINS } from './component';
 
-export interface CalendarDay {
-  year: number;
-  month: number;
-  day: number;
-  week?: number;
-  today?: boolean;
-}
-
 export interface CalendarMonth {
   year: number;
   month: number;
 }
 
-interface DateMark extends Partial<Pick<CalendarDay, 'day' | 'month' | 'year'>> {
+export interface CalendarDay extends CalendarMonth {
+  day: number;
+  week?: number;
+  today?: boolean;
+}
+
+interface DateMark extends Partial<Pick<CalendarDay, 'year' | 'month' | 'day'>> {
   date?: string | number | Date | CalendarDay;
 }
 
 export type DateStyle = Record<string, string | number>;
+
 export interface CalendarMark extends DateMark {
   type: 'schedule' | 'corner' | 'festival' | 'solar';
   text: string;
@@ -170,9 +169,14 @@ export const reorderStyle = (style: string | DateStyle, pick?: Array<string | Re
 
 export const styleStringify = (style: DateStyle | null, pick?: Array<string | RegExp>) => {
   if (!style) return '';
-  let keys = Object.keys(style).map(key => `${camelToSnake(key, '-')}:${style[key]};`);
-  if (pick?.length) keys = keys.filter(k => includes(pick, k));
-  return keys.sort().join('');
+  return Object.keys(style)
+    .flatMap(key => {
+      const value = style[key];
+      if (value == null || value === '' || (pick?.length && !includes(pick, key))) return [];
+      return `${camelToSnake(key, '-')}:${value};`;
+    })
+    .sort()
+    .join('');
 };
 
 export const themeStyle = (style?: WcDateStyle): string | number | undefined => style?.[Layout.theme!] || style?.light;

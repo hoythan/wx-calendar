@@ -65,6 +65,8 @@ export const values = <T>(obj: Record<string, T>): T[] => Object.keys(obj).map(k
 
 export const notEmptyObject = (val: Record<any, any>): boolean => !!Object.keys(val).length;
 
+export const middle = (count: number) => count >> 1;
+
 export const omit = <T extends Record<string, any>, K extends keyof T>(obj: T, keys: K[]) =>
   Object.keys(obj).reduce(
     (acc, key) => {

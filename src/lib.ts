@@ -8,7 +8,6 @@
  */
 export * from './utils/shared';
 export {
-  CalendarView,
   OnceEmitter,
   nextTick,
   severalTicks,
@@ -20,7 +19,15 @@ export {
   addLayoutHideCls,
   hasLayoutArea
 } from './basic/tools';
-export { CALENDAR_PANELS, WEEKS, FULL_LAYOUT, GREGORIAN_MONTH_DAYS, VIEWS, View } from './basic/constants';
+export {
+  CALENDAR_PANELS,
+  WEEKS,
+  FULL_LAYOUT,
+  GREGORIAN_MONTH_DAYS,
+  VIEWS,
+  View,
+  CalendarView
+} from './basic/constants';
 
 export { Layout } from './basic/layout';
 export { MARK_PLUGIN_KEY, SCHEDULE_MARK_ORIGIN } from './plugins/mark';

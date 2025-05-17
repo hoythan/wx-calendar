@@ -34,6 +34,8 @@ export const VIEWS = {
   SCHEDULE: 'schedule'
 } as const;
 
+export type CalendarView = (typeof VIEWS)[keyof typeof VIEWS];
+
 export enum View {
   week = 1 << 0,
   month = 1 << 1,

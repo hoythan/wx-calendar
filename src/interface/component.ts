@@ -7,8 +7,8 @@
  * @LastEditTime: 2025-02-16 13:46:35
  */
 import type { CalendarDay, WxCalendar, WcMonth, WcYear, WcSubYear, WcScheduleMark, WcScheduleInfo } from './calendar';
-import { isSkyline, type CalendarView, Shared } from '../basic/tools';
-import type { View } from '../basic/constants';
+import { isSkyline, Shared } from '../basic/tools';
+import type { View, CalendarView } from '../basic/constants';
 import type { Pointer, CalendarPointer } from '../basic/pointer';
 import type { PanelTool } from '../basic/panel';
 import type { Dragger } from '../basic/drag';
@@ -317,8 +317,6 @@ export interface CalendarCustomProp extends WechatMiniprogram.IAnyObject {
   _loaded_: boolean;
   /** 当前视图的flag */
   _view_: View;
-  /** 日期中心水平坐标 */
-  _centres_: Array<number>;
   /** 保存和视图无关的年度数据，和data里的years一一对应 */
   _years_: Array<WcSubYear>;
   /** 控制选中日期圆圈的实例对象 */

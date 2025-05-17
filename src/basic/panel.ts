@@ -9,9 +9,9 @@
 import { CalendarHandler } from '../interface/component';
 import { Layout } from './layout';
 import { CALENDAR_PANELS, View, VIEWS } from './constants';
-import { circularDiff, flagView, nextTick, middle } from './tools';
+import { circularDiff, flagView, nextTick } from './tools';
 import { mul, div } from '../utils/calc';
-import { nonNullable } from '../utils/shared';
+import { nonNullable, middle } from '../utils/shared';
 import {
   getMonthDays,
   normalDate,
@@ -31,6 +31,15 @@ import type { CalendarDay, CalendarMonth, WcFullYear } from '../interface/calend
 type RefreshFields = PartRequired<CalendarData, 'current' | 'checked'>;
 
 type Offsets = [wdx: number, offset: number];
+
+/**
+ * 初始化面板对象
+ * @param prefix
+ * @param mixin
+ */
+export const initPanels = <T>(prefix: string) =>
+  Array.from<undefined, T>({ length: CALENDAR_PANELS }, (_, i) => ({ key: `${prefix}_${i}` }) as T);
+
 export class PanelTool extends CalendarHandler {
   /**
    * 创建【月｜日程】视图面板数据
