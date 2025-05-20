@@ -157,15 +157,6 @@ export const viewportOffset = (component: ComponentInstance) => {
   });
 };
 
-/**
- * 合并字符串
- * @param strs 字符串
- * @param separator 分隔符，默认 ','
- */
-export const mergeStr = (strs: Array<string>, separator: string = ',') => {
-  return strs.flatMap(s => s.split(separator).map(w => w.trim())).join(separator);
-};
-
 export interface OnceEmitter {
   emit: (...detail: any[]) => void;
   cancel: () => void;

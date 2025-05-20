@@ -14,7 +14,6 @@ export {
   viewFlag,
   flagView,
   isSkyline,
-  mergeStr,
   layoutHideCls,
   addLayoutHideCls,
   hasLayoutArea

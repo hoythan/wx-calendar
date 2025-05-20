@@ -24,19 +24,8 @@ import { Dragger } from './basic/drag';
 import { AnnualPanelSwitch } from './basic/annual';
 import { YearPrinter } from './basic/printer';
 import { MARK_PLUGIN_KEY } from './plugins/mark';
-import {
-  isView,
-  viewFlag,
-  flagView,
-  nodeRect,
-  isSkyline,
-  initWeeks,
-  mergeStr,
-  onceEmitter,
-  layoutHideCls
-} from './basic/tools';
-import { promises, omit, middle, getStyle } from './utils/shared';
-import { add, sub, div } from './utils/calc';
+import { isView, viewFlag, flagView, nodeRect, isSkyline, initWeeks, onceEmitter, layoutHideCls } from './basic/tools';
+import { omit, middle, getStyle, mergeStr } from './utils/shared';
 
 import type { WcYear, CalendarMark, CalendarStyleMark } from './interface/calendar';
 import type { CalendarView } from './basic/constants';

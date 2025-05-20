@@ -48,20 +48,20 @@ const toInt$Pow = (...numbers: Array<string | number>): Array<[integer: number, 
  * @param n1 加数
  * @param n2 加数
  */
-export const add = (n1: number | string, n2: number | string) => {
-  const [[m1, p1], [m2, p2]] = toInt$Pow(n1, n2);
-  const pm = Math.max(p1, p2);
-  const k1 = m1 * 10 ** (pm - p1);
-  const k2 = m2 * 10 ** (pm - p2);
-  return (k1 + k2) / 10 ** pm;
-};
+// export const add = (n1: number | string, n2: number | string) => {
+//   const [[m1, p1], [m2, p2]] = toInt$Pow(n1, n2);
+//   const pm = Math.max(p1, p2);
+//   const k1 = m1 * 10 ** (pm - p1);
+//   const k2 = m2 * 10 ** (pm - p2);
+//   return (k1 + k2) / 10 ** pm;
+// };
 
 /**
  * 减法
  * @param n1 被减数
  * @param n2 减数
  */
-export const sub = (n1: number | string, n2: number | string) => add(n1, -n2);
+// export const sub = (n1: number | string, n2: number | string) => add(n1, -n2);
 
 /**
  * 乘法

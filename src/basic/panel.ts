@@ -89,9 +89,9 @@ export class PanelTool extends CalendarHandler {
     for (let i = 0; i < CALENDAR_PANELS; i++) {
       const panel = this._instance_.data.panels[i];
       const diff = circularDiff(i, current);
-      const weekdate = offsetDate(checked!, diff * 7);
-      const [wdx, offset] = this.calcWeekOffset(weekdate);
-      const date = isWeekView ? weekdate : inMonthDate(checked!.year, checked!.month + diff, checked!.day);
+      const weekDate = offsetDate(checked!, diff * 7);
+      const [wdx, offset] = this.calcWeekOffset(weekDate);
+      const date = isWeekView ? weekDate : inMonthDate(checked!.year, checked!.month + diff, checked!.day);
       if (panel.year !== date.year || panel.month !== date.month) {
         const _panel = this.createPanel(date, i, [wdx, offset], panels);
         sets[`panels[${i}]`] = _panel;

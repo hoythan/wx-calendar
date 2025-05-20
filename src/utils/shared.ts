@@ -139,3 +139,12 @@ export const getStyle = (style: string, key: string) => {
   if (!value?.[0]) return null;
   return value[0].replace(/[\r\n]+/g, '').trim();
 };
+
+/**
+ * 合并字符串
+ * @param strs 字符串
+ * @param separator 分隔符，默认 ','
+ */
+export const mergeStr = (strs: Array<string>, separator: string = ',') => {
+  return strs.flatMap(s => s.split(separator).map(w => w.trim())).join(separator);
+};
