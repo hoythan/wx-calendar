@@ -390,9 +390,9 @@ var invertColor = function (color) {
 };
 
 var getStyle = function (style, key) {
-  var value = style.match(getRegExp('(?<=' + key + ' *:)([^;]+)'));
-  if (!value || !value.length || !value[0]) return null;
-  return value[0].replace(getRegExp('[\\r\\n]+', 'g'), '').trim();
+  var value = style.match(getRegExp('(?:' + key + ' *:)([^;]+)'));
+  if (!value || !value.length || !value[1]) return null;
+  return value[1].replace(getRegExp('[\\r\\n]+', 'g'), '').trim();
 };
 
 var styleChange = function (view, _, owner) {

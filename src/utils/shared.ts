@@ -135,9 +135,9 @@ export const includes = (arr: Array<string | RegExp>, search: string): boolean =
 };
 
 export const getStyle = (style: string, key: string) => {
-  const value = style.match(new RegExp(`(?<=${key}\\s*:)([^;]+)`));
-  if (!value?.[0]) return null;
-  return value[0].replace(/[\r\n]+/g, '').trim();
+  const value = style.match(new RegExp(`(?:${key}\\s*:)([^;]+)`));
+  if (!value?.[1]) return null;
+  return value[1].replace(/[\r\n]+/g, '').trim();
 };
 
 /**
