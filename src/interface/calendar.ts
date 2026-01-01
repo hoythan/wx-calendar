@@ -483,8 +483,8 @@ const weekOrder = (date: CalendarDay, weekstart = 0) => {
   const start = new Date(year, 0, 4);
   start.setDate(start.getDate() - ((start.getDay() + 7 - weekstart) % 7));
   // 作为上一年的最后一周
-  if (curr < start) return weekOrder({ year, month: 1, day: 0 }, weekstart);
-  /** 计算相隔天数 */
+  if (curr < start) return weekOrder({ year: year - 1, month: 12, day: 31 }, weekstart);
+  
   const days = Math.floor((+curr - +start) / 86400000) + 1;
   return Math.ceil(days / 7);
 };
